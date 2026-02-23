@@ -457,7 +457,23 @@ const giftBox = document.getElementById('giftBox');
 const preReveal = document.getElementById('preReveal');
 const postReveal = document.getElementById('postReveal');
 
+let notified = false;
 function reveal() {
+  // Send email notification (only once)
+  if (!notified) {
+    notified = true;
+    fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id: 'service_ys6s5qu',
+        template_id: 'template_3e4h2gj',
+        user_id: 'FcrHs0-R92lLKqFHC',
+        template_params: {}
+      })
+    }).catch(() => {});
+  }
+
   preReveal.classList.add('hidden');
   setTimeout(() => {
     postReveal.classList.add('visible');
@@ -471,6 +487,11 @@ function reveal() {
 
 giftBox.addEventListener('click', reveal);
 giftBox.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') reveal(); });
+
+createHearts();
+</script>
+</body>
+</html>
 
 createHearts();
 </script>
