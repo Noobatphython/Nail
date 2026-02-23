@@ -31,21 +31,23 @@
   }
 
   .container {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 2;
-    text-align: center;
-    padding: 1.5rem;
-    max-width: 500px;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    padding: 1.5rem;
   }
 
   .pre-reveal {
     transition: opacity 0.5s, transform 0.5s;
     width: 100%;
+    max-width: 500px;
+    text-align: center;
   }
   .pre-reveal.hidden {
     opacity: 0;
@@ -154,6 +156,8 @@
     transition: opacity 0.8s ease, transform 0.8s ease;
     pointer-events: none;
     width: 100%;
+    max-width: 500px;
+    text-align: center;
   }
   .post-reveal.visible {
     opacity: 1;
