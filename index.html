@@ -19,7 +19,6 @@
     position: relative;
   }
 
-  /* Soft gradient background */
   body::before {
     content: '';
     position: fixed;
@@ -38,20 +37,15 @@
     padding: 1.5rem;
     max-width: 500px;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
   }
 
-  @media (max-width: 480px) {
-    .voucher { padding: 2rem 1.5rem 1.5rem; }
-    .voucher h1 { font-size: 1.3rem; }
-    .voucher h1 span { font-size: 1.9rem; }
-    .pre-reveal h1 { font-size: 1.8rem; }
-    .gif-container { max-width: 180px; }
-    .terms { padding: 1rem; }
-  }
-
-  /* ---- PRE-REVEAL STATE ---- */
   .pre-reveal {
     transition: opacity 0.5s, transform 0.5s;
+    width: 100%;
   }
   .pre-reveal.hidden {
     opacity: 0;
@@ -154,12 +148,12 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  /* ---- POST-REVEAL STATE ---- */
   .post-reveal {
     opacity: 0;
     transform: translateY(30px) scale(0.9);
     transition: opacity 0.8s ease, transform 0.8s ease;
     pointer-events: none;
+    width: 100%;
   }
   .post-reveal.visible {
     opacity: 1;
@@ -192,6 +186,11 @@
     margin: 0 auto 1rem;
     border-radius: 12px;
     overflow: hidden;
+  }
+  .gif-container img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
   }
 
   .voucher h1 {
@@ -262,7 +261,6 @@
     opacity: 0.6;
   }
 
-  /* ---- CONFETTI CANVAS ---- */
   #confetti-canvas {
     position: fixed;
     inset: 0;
@@ -270,7 +268,6 @@
     pointer-events: none;
   }
 
-  /* ---- FALLING HEARTS ---- */
   .hearts-container {
     position: fixed;
     inset: 0;
@@ -284,10 +281,8 @@
     opacity: 0;
     font-size: 16px;
     color: #f9a8d4;
-    animation-fill-mode: forwards;
   }
 
-  /* ---- ANIMATIONS ---- */
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-12px); }
@@ -300,11 +295,6 @@
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
-  @keyframes bounceIn {
-    0% { transform: scale(0); opacity: 0; }
-    60% { transform: scale(1.2); }
-    100% { transform: scale(1); opacity: 1; }
-  }
   @keyframes heartFall {
     0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
     5% { opacity: 0.7; }
@@ -313,18 +303,24 @@
     75% { transform: translateY(75vh) translateX(10px) rotate(270deg); opacity: 0.3; }
     100% { transform: translateY(105vh) translateX(-5px) rotate(360deg); opacity: 0; }
   }
+
+  @media (max-width: 480px) {
+    .voucher { padding: 2rem 1.5rem 1.5rem; }
+    .voucher h1 { font-size: 1.3rem; }
+    .voucher h1 span { font-size: 1.9rem; }
+    .pre-reveal h1 { font-size: 1.8rem; }
+    .gif-container { max-width: 180px; }
+    .terms { padding: 1rem; }
+  }
 </style>
 </head>
 <body>
-
 <div class="hearts-container" id="heartsBg"></div>
 <canvas id="confetti-canvas"></canvas>
-
 <div class="container">
-  <!-- Before click -->
   <div class="pre-reveal" id="preReveal">
     <h1>You Have a Surprise!</h1>
-    <p>Someone special has something for you&hellip;</p>
+    <p>Someone special has something for you...</p>
     <div class="gift-box" id="giftBox" role="button" tabindex="0" aria-label="Open your surprise">
       <div class="bow"></div>
       <div class="lid"></div>
@@ -334,36 +330,29 @@
     </div>
     <p class="tap-text">Tap the gift to open</p>
   </div>
-
-  <!-- After click -->
   <div class="post-reveal" id="postReveal">
     <div class="voucher">
       <div class="gif-container">
-        <img src="https://media.tenor.com/lBD8M0U0ZYYAAAAC/dudu-doing-nails-for-bubu-nails.gif" alt="Dudu doing nails" style="width:100%;border-radius:12px;display:block;">
+        <img src="https://media.tenor.com/QZZDyy7rOaYAAAAj/dudu-doing-nails-for-bubu-nails.gif" alt="Dudu doing nails">
       </div>
       <h1>Aron<br><span>Will Pay For Your Next Nails</span></h1>
       <p class="subtitle">Go get them done princess, you deserve it</p>
-
-      <div class="heart-divider">♥</div>
-
+      <div class="heart-divider">&#9829;</div>
       <div class="terms">
         <h3>Terms &amp; Conditions</h3>
-        <p>1. Must be £50 or under.</p>
-        <p>2. If it's over £50, you need to inform Aron first.</p>
+        <p>1. Must be &pound;50 or under.</p>
+        <p>2. If it's over &pound;50, you need to inform Aron first.</p>
         <p>3. Valid for one (1) nail appointment.</p>
       </div>
-
       <p class="footer-note">Made with love, from Aron</p>
     </div>
   </div>
 </div>
-
 <script>
-// ---- CONFETTI SYSTEM ----
-const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
-let confettiPieces = [];
-let animating = false;
+var canvas = document.getElementById('confetti-canvas');
+var ctx = canvas.getContext('2d');
+var confettiPieces = [];
+var animating = false;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -372,51 +361,53 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-const colors = ['#ec4899','#f472b6','#a855f7','#fbbf24','#f9a8d4','#c084fc','#fb923c','#34d399'];
+var confettiColors = ['#ec4899','#f472b6','#a855f7','#fbbf24','#f9a8d4','#c084fc','#fb923c','#34d399'];
 
-class Confetti {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = -20 - Math.random() * 200;
-    this.w = 6 + Math.random() * 8;
-    this.h = 4 + Math.random() * 6;
-    this.color = colors[Math.floor(Math.random() * colors.length)];
-    this.vx = (Math.random() - 0.5) * 4;
-    this.vy = 2 + Math.random() * 4;
-    this.angle = Math.random() * Math.PI * 2;
-    this.spin = (Math.random() - 0.5) * 0.2;
-    this.opacity = 1;
-    this.shape = Math.random() > 0.5 ? 'rect' : 'circle';
+function createConfettiPiece() {
+  return {
+    x: Math.random() * canvas.width,
+    y: -20 - Math.random() * 200,
+    w: 6 + Math.random() * 8,
+    h: 4 + Math.random() * 6,
+    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+    vx: (Math.random() - 0.5) * 4,
+    vy: 2 + Math.random() * 4,
+    angle: Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.2,
+    opacity: 1,
+    isCircle: Math.random() > 0.5
+  };
+}
+
+function updateConfetti(c) {
+  c.x += c.vx;
+  c.y += c.vy;
+  c.vy += 0.04;
+  c.angle += c.spin;
+  if (c.y > canvas.height + 20) c.opacity = 0;
+  if (c.y > canvas.height * 0.7) c.opacity -= 0.01;
+}
+
+function drawConfetti(c) {
+  if (c.opacity <= 0) return;
+  ctx.save();
+  ctx.translate(c.x, c.y);
+  ctx.rotate(c.angle);
+  ctx.globalAlpha = Math.max(0, c.opacity);
+  ctx.fillStyle = c.color;
+  if (c.isCircle) {
+    ctx.beginPath();
+    ctx.arc(0, 0, c.w / 2, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
   }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += 0.04;
-    this.angle += this.spin;
-    if (this.y > canvas.height + 20) this.opacity = 0;
-    if (this.y > canvas.height * 0.7) this.opacity -= 0.01;
-  }
-  draw() {
-    if (this.opacity <= 0) return;
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.angle);
-    ctx.globalAlpha = Math.max(0, this.opacity);
-    ctx.fillStyle = this.color;
-    if (this.shape === 'rect') {
-      ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
-    } else {
-      ctx.beginPath();
-      ctx.arc(0, 0, this.w / 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-  }
+  ctx.restore();
 }
 
 function launchConfetti() {
-  for (let i = 0; i < 200; i++) {
-    confettiPieces.push(new Confetti());
+  for (var i = 0; i < 200; i++) {
+    confettiPieces.push(createConfettiPiece());
   }
   if (!animating) {
     animating = true;
@@ -426,8 +417,13 @@ function launchConfetti() {
 
 function animateConfetti() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  confettiPieces = confettiPieces.filter(c => c.opacity > 0);
-  confettiPieces.forEach(c => { c.update(); c.draw(); });
+  var remaining = [];
+  for (var i = 0; i < confettiPieces.length; i++) {
+    updateConfetti(confettiPieces[i]);
+    drawConfetti(confettiPieces[i]);
+    if (confettiPieces[i].opacity > 0) remaining.push(confettiPieces[i]);
+  }
+  confettiPieces = remaining;
   if (confettiPieces.length > 0) {
     requestAnimationFrame(animateConfetti);
   } else {
@@ -435,31 +431,32 @@ function animateConfetti() {
   }
 }
 
-// ---- FALLING HEARTS ----
-function createHearts() {
-  const container = document.getElementById('heartsBg');
-  const hearts = ['&#9829;', '&#9825;'];
-  const colors = ['#f9a8d4','#ec4899','#f472b6','#c084fc','#fda4af'];
-  for (let i = 0; i < 30; i++) {
-    const h = document.createElement('div');
+// Falling hearts background
+(function() {
+  var container = document.getElementById('heartsBg');
+  var heartChars = ['\u2665', '\u2661'];
+  var heartColors = ['#f9a8d4','#ec4899','#f472b6','#c084fc','#fda4af'];
+  for (var i = 0; i < 30; i++) {
+    var h = document.createElement('div');
     h.className = 'heart';
-    h.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+    h.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
     h.style.left = Math.random() * 100 + '%';
     h.style.fontSize = (12 + Math.random() * 18) + 'px';
-    h.style.color = colors[Math.floor(Math.random() * colors.length)];
-    h.style.animation = `heartFall ${5 + Math.random() * 7}s ${Math.random() * 4}s linear infinite`;
+    h.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+    var duration = 5 + Math.random() * 7;
+    var delay = Math.random() * 4;
+    h.style.animation = 'heartFall ' + duration + 's ' + delay + 's linear infinite';
     container.appendChild(h);
   }
-}
+})();
 
-// ---- REVEAL LOGIC ----
-const giftBox = document.getElementById('giftBox');
-const preReveal = document.getElementById('preReveal');
-const postReveal = document.getElementById('postReveal');
+// Reveal logic
+var giftBox = document.getElementById('giftBox');
+var preReveal = document.getElementById('preReveal');
+var postReveal = document.getElementById('postReveal');
+var notified = false;
 
-let notified = false;
 function reveal() {
-  // Send email notification (only once)
   if (!notified) {
     notified = true;
     fetch('https://api.emailjs.com/api/v1.0/email/send', {
@@ -471,29 +468,21 @@ function reveal() {
         user_id: 'FcrHs0-R92lLKqFHC',
         template_params: {}
       })
-    }).catch(() => {});
+    }).catch(function() {});
   }
-
   preReveal.classList.add('hidden');
-  setTimeout(() => {
+  setTimeout(function() {
     postReveal.classList.add('visible');
     launchConfetti();
-    // second burst
-    setTimeout(() => launchConfetti(), 800);
-    // third burst
-    setTimeout(() => launchConfetti(), 1800);
+    setTimeout(function() { launchConfetti(); }, 800);
+    setTimeout(function() { launchConfetti(); }, 1800);
   }, 400);
 }
 
 giftBox.addEventListener('click', reveal);
-giftBox.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') reveal(); });
-
-createHearts();
-</script>
-</body>
-</html>
-
-createHearts();
+giftBox.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') reveal();
+});
 </script>
 </body>
 </html>
